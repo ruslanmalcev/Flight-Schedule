@@ -1,57 +1,55 @@
 #ifndef FUNCTIONS
 #define FUNCTIONS
 
-//Определение составляющих структур "Дата вылета" и "Время вылета"
-
-// время вылета
+// departure time
 typedef struct time
 {
-    int hour;// час 0-23
-    int minute;// минуты 0-59
+    int hour;
+    int minute;
 } Time;
 
-//дата вылета
+// departure date
 typedef struct date
 {
-    int month;// месяц 1-12
-    int day;// день 1-31
+    int month;
+    int day;
     Time time;
 } Date;
 
-//Определение структурного типа "Авиарейс"
 typedef struct flight
 {
-    int flightNumber;// номер рейса
-    char pointDestination[20];// пункт назначения
-    int price;// цена билета
-    Date date;// дата вылета
+    int flightNumber;
+    char pointDestination[20];
+    int price;
+    Date date;
 } Flight;
 
-void initialize(Flight*, int);//инициализация, указатель на структуру,размер массива
-int clear_entry(Flight*, int);// очистка записи
-void input_from_keyboard(Flight*, int);//ввод данных
-void input_data(Flight*, int);// блок ввода
-void output_menu(Flight*, int);// вывод данных о рейсе
+void initialize(Flight*, int);
+int clear_entry(Flight*, int);
+void input_from_keyboard(Flight*, int);
+void input_data(Flight*, int);
+void output_menu(Flight*, int);
 void output_data();
-int search_free_entry(Flight*, int);// поиск свободной переменной
-void search_min_menu(Flight*, int); //меню поиска минимального значения
-int search_min_price(Flight*, int);// поиск минимума по цене
-int search_min_date(Flight*, int);// поиск минимума по дате и времени
-void search_menu_for_value(Flight*, int);// меню поиска по заданному значению
-int search_for_date(Flight*, int);// поиск по дате
-int search_for_price(Flight*, int);// поиск по цене
-void sort_menu_for_value(Flight*, int);// меню сортировки массива структур
-void alphabet_sort(Flight*, int);// сортировка по алфавиту(затем по дате и времени)
-void date_sort(Flight*, int);// сортировка по дате и времени
-void price_sort(Flight*, int);// сортировка по цене
-void delete_element(Flight*, int*);// удаление заданного элемента
-void edit(Flight*, int);// изменение заданного элемента
-void average_price(Flight*, int);// вычисление средней стоимости билета по введенной дате
-void output_table(Flight*, int);// вывод таблицы
-int input_numbers(int, int);// ввод чисел
-int number_day_in_month(int);// кол-во дней в месяце
-int input_city_name();// ввод названия города
+int search_free_entry(Flight*, int);
+void search_min_menu(Flight*, int);
+int search_min_price(Flight*, int);
+int search_min_date(Flight*, int);
+void search_menu_for_value(Flight*, int);
+int search_for_date(Flight*, int);
+int search_for_price(Flight*, int);
+void sort_menu_for_value(Flight*, int);
+void alphabet_sort(Flight*, int);
+void date_sort(Flight*, int);
+void price_sort(Flight*, int);
+void delete_element(Flight*, int*);
+void edit(Flight*, int);
+void average_price(Flight*, int);
+void output_table(Flight*, int);
+int input_numbers(int, int);
+int number_day_in_month(int);
+int input_city_name();
 int check_number_dialog();
-int exit_dialog(); // проверяет точно ли выйти?
+int exit_dialog();
 
 #endif // FUNCTIONS
+
