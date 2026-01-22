@@ -5,12 +5,9 @@
 #include <windows.h>
 #include "functions.h"
 
-#define P printf
-#define S scanf
-#define N 45
-#define M 15
 
-char city[N][M]={"NEW YORK","KIROV","MOSCOW","ST.PETERBURG","EKATERINBURG","ROSTOV",
+
+char cities[N][M]={"NEW YORK","KIROV","MOSCOW","ST.PETERBURG","EKATERINBURG","ROSTOV",
          "KRASNODAR","PETROPAVLOVSK","NOVOSIBIRSK","OMSK","HABAROVSK","CHITA","YAKUTSK","MURMANSK",
        "ARKHANGELSK","STAVROPOL","ORENBURG","PERM","UFA","SAMARA","VOLGOGRAD","SARATOV",
        "IRKUTSK","IJEVSK","PSKOV","PETROZAVODSK","KAZAN","ULYANOVSK","VLADIVOSTOK","SURGUT",
@@ -18,38 +15,38 @@ char city[N][M]={"NEW YORK","KIROV","MOSCOW","ST.PETERBURG","EKATERINBURG","ROST
        "BARNAUL","CHELYABINSK","BRATSK","SYKTYVKAR","KIEV","MINSK","ASTANA","ADLER"};
 
 //--------init---------------//
-void initialize(Flight* p,int m)// initializing the database
+void initialize(Flight* p, int n)// initializing the database
 {
        int i,j,k;
        srand(time(NULL));
-        for(i = 0; i < m; i++)
+        for(i = 0; i < n; i++)
         {
-            k = 0 + rand() % N;// city name
+            k = 0 + rand() % N;// cities name
             p[i].flightNumber = 1 + rand() % 999;// flight number
             for(j = 0; j < M; j++)
             {
-               p[i].pointDestination[j] = city[k][j];
+               p[i].pointDestination[j] = cities[k][j];
             }
             p[i].price=6000+rand()%3000;
-            p[i].date.day=5+rand()%7;
-            p[i].date.month=12;
+            p[i].date.day=1+rand()%14;
+            p[i].date.month= 2; // february
             p[i].date.time.hour=0+rand()%24;
             p[i].date.time.minute=60/(2+rand()%3);
         }
-
-} // init()
+        date_sort(p, n);
+} // initialize()
 
 //--------print--------------//
-void output_table(Flight* p,int z)//‚˚‚Ó‰ Ú‡·ÎËˆ˚
+void output_table(Flight* p,int z)//–≤—ã–≤–æ–¥ —Ç–∞–±–ª–∏—Ü—ã
 {
     system("cls");
     system("color 1F");
     int y;
-         P("\t| N|  N|           DESTINATION           |    DATE |    TIME |         PRICE|\n");
-         P("\t-----------------------------------------------------------------------------\n");
+         printf("\t| N|  N|           DESTINATION           |    DATE |    TIME |         PRICE|\n");
+         printf("\t-----------------------------------------------------------------------------\n");
     for(y = 0; y < z; y++)
     {
-        P("\t|%2d|%3d|       %15s           |   %2d.%2d |   %2d: %2d|         %5d|\n"
+        printf("\t|%2d|%3d|       %15s           |   %2d.%2d |   %2d: %2d|         %5d|\n"
         ,y+1,
         p[y].flightNumber,p[y].pointDestination,
         p[y].date.day,
@@ -59,9 +56,9 @@ void output_table(Flight* p,int z)//‚˚‚Ó‰ Ú‡·ÎËˆ˚
         p[y].price
         );
     }
-         P("\t-----------------------------------------------------------------------------\n\
-            \\t<Esc> to return in menu...>");
-         //P("\t<Esc> to return in menu...");
+         printf("\t-----------------------------------------------------------------------------\n"
+            "\t<Esc> to return in menu...>");
+         //printf("\t<Esc> to return in menu...");
    while(1)
    {
    switch(getch())
@@ -75,24 +72,24 @@ void output_table(Flight* p,int z)//‚˚‚Ó‰ Ú‡·ÎËˆ˚
   }
      system("color 70"); // changes color like color in the menu
      return;
-}// print()
+}// output_table()
 
 //--------clear--------------//
 int clear_entry(Flight* p,int z)
 {
     int i;
          system("cls");
-     P("\n\t\t\tCLEARING LINES.\n");
+     printf("\n\t\t\tCLEARING LINES.\n");
     while(1)
     {
-          P("\r\t\t\t                               ");
-          P("\r\t\t\tNUMBER of a LINE(or <Esc>):");
+          printf("\r\t\t\t                               ");
+          printf("\r\t\t\tNUMBER of a LINE(or <Esc>):");
          i = input_numbers(5,0);
          if(i == -1)
             return i;
          if (i > z) // very large line number
           {
-            P("\r\t\t\tWRONG NUMBER of the LINE          ");
+            printf("\r\t\t\tWRONG NUMBER of the LINE          ");
             Sleep(1500);
             continue;
           }
@@ -106,39 +103,39 @@ int clear_entry(Flight* p,int z)
         p[i].date.time.minute = 0;
     }
    return i;
-}// clear()
+}// clear_entry()
 
 //--------input--------------//
-void input_from_keyboard(Flight* pr,int x)
+void input_from_keyboard(Flight* pr, int x)
 {
 
     int i,r;
     system("cls");
-       P("\n\n\t\t\tINPUT DATA of a FLIGHT:\n");
+       printf("\n\n\t\t\tINPUT DATA of a FLIGHT:\n");
     while(1)
     {
          r = search_free_entry(pr,x);
          if(r<0)
             {
-                P("\n\n\t\t\tTHERE IS NOT ANY EMPTY LINE");
+                printf("\n\n\t\t\tTHERE IS NOT ANY EMPTY LINE");
             Sleep(1700);
             }
-     P("\r\t\t\tNUMBER of a LINE(or <Esc>):");
+     printf("\r\t\t\tNUMBER of a LINE(or <Esc>):");
      i = input_numbers(5,0);
      if(i == -1)
         return;
        if(i > x)// very large number
        {
-           P("\r\t\t\tTOO MUCH NUMBER!                           ");
+           printf("\r\t\t\tTOO MUCH NUMBER!                           ");
            Sleep(1500);
            continue;
        }
        i--;
        if(pr[i].pointDestination[0]!='\0')
        {
-           P("\r\t\t\tTHIS LINE is not EMPTY.                     ");
+           printf("\r\t\t\tTHIS LINE is not EMPTY.                     ");
            Sleep(1500);
-           P("\r\t\t\tDO YOU WANT REWRITE IT(Y/N)?");
+           printf("\r\t\t\tDO YOU WANT REWRITE IT(Y/N)?");
         while(1)
            {
                switch (getch())
@@ -154,79 +151,79 @@ void input_from_keyboard(Flight* pr,int x)
      break;
     }
     input_data(pr,i);
-}// input()
+}// input_from_keyboard()
 
 //---------inputdata----------//
     void input_data(Flight* s, int a)
 {
-    int x, j, r_num;
+    int x, j, number;
     while(1){
-        P("\n\t\t\tNUMBER of a FLIGHT:");
-        r_num = input_numbers(5, 0);
-        switch(r_num){
+        printf("\n\t\t\tNUMBER of a FLIGHT:");
+        number = input_numbers(5, 0);
+        switch(number){
         case -1: continue;
         default:
-            s[a].flightNumber = r_num;
+            s[a].flightNumber = number;
             break;
         }
         break;
     }
-        P("\n\t\t\tPOINT of the DESTINATION:");
+        printf("\n\t\t\tPOINT of the DESTINATION:");
         j = input_city_name();
         if(j >= 0)
         {
             int i;
-            for(i = 0; city[j][i] != '\0'; i++)
-            s[a].pointDestination[i] = city[j][i];
+            for(i = 0; cities[j][i] != '\0'; i++)
+            s[a].pointDestination[i] = cities[j][i];
             s[a].pointDestination[i] = '\0';
         }
         if(j == -2)
-            P("\tNO SUCH DIRECTIONS");
+            printf("\tNO SUCH DIRECTIONS");
 
-       P("\n\t\t\tDATE DEPARTURE:");
+       printf("\n\t\t\tDATE DEPARTURE:");
        while(1){
-            P("\n\t\t\tmonth: ");
-            switch(r_num = input_numbers(2,0)){
+            printf("\n\t\t\tmonth: ");
+            switch(number = input_numbers(2,0)){
                 case -1: continue;
-                default: s[a].date.month = r_num;
+                default: s[a].date.month = number;
                 break;
             }
         break;
        }
        while(1){
-            P("\n\t\t\tday: ");
+            printf("\n\t\t\tday: ");
                 x = number_day_in_month(s[a].date.month);
-            switch(r_num = input_numbers(1,x)){
+            switch(number = input_numbers(1,x)){
                 case -1: continue;
                 default:
-                s[a].date.day = r_num;
+                s[a].date.day = number;
                 break;
             }
             break;
        }
-    P("\n\t\t\tTIME DEPARTURE:");
+    printf("\n\t\t\tTIME DEPARTURE:");
    while(1){
-        P("\n\t\t\thour: ");
-        switch(r_num = input_numbers(3, 0)){
+        printf("\n\t\t\thour: ");
+        switch(number = input_numbers(3, 0)){
             case -1: continue;
-            default: s[a].date.time.hour= r_num;
+            default: s[a].date.time.hour= number;
             break;
         }
         break;
    }
     while(1){
-        P("\n\t\t\tminute: ");
-          switch(r_num = input_numbers(4,0)){
+        printf("\n\t\t\tminute: ");
+          switch(number = input_numbers(4,0)){
               case -1: continue;
-              default: s[a].date.time.minute = r_num;
+              default: s[a].date.time.minute = number;
               break;
           }
           break;
     }
     while(1){
-        P("\n\t\t\tPRICE of the TICKET:");
-        switch(r_num = input_numbers(6, 0)){
-        case -1: P("\n\t\tWrong price!");
+        printf("\n\t\t\tPRICE of the TICKET:");
+        switch(number = input_numbers(6, 0)){
+        case -1: printf("\n\t\tWrong price!");
             Sleep(1700);
             continue;
         default:
@@ -235,7 +232,7 @@ void input_from_keyboard(Flight* pr,int x)
         }
         break;
     }
-}// inputdata()
+}// input_data()
 
 //--------output-------------//
 void output_menu(Flight* p,int z)
@@ -244,27 +241,27 @@ void output_menu(Flight* p,int z)
     while(1)
     {
         system("cls");
-    P("\t\t\tOUTPUT DATA of FLIGHTS.\n\n");
-    P("\n\t\t\t<Esc> to return : ");
+    printf("\t\t\tOUTPUT DATA of FLIGHTS.\n\n");
+    printf("\n\t\t\t<Esc> to return : ");
     j = input_city_name();
      if(j == -1)
         return;
      if(j == -2)
       {
-        P("\tNO SUCH DIRECTION!");
+        printf("\tNO SUCH DIRECTION!");
        Sleep(2500);
       continue;
       }
       for(k = i = 0; i < z; i++)
       {
-          if(!strcmp(city[j],p[i].pointDestination))
+          if(!strcmp(cities[j],p[i].pointDestination))
             {
              output_data(p,i);
              k++;
             }
       }
       if(!k)// no matches
-      P("\n\n\t\t\tTHERE are not FLIGHTS to this  CITY");
+      printf("\n\n\t\t\tTHERE are not FLIGHTS to this  CITY");
      switch(getch())
        {
         case 27:
@@ -274,20 +271,20 @@ void output_menu(Flight* p,int z)
        }
 
     }
-}// output()
+}// output_menu()
 
 //----------dataout---------//
 void output_data(Flight* s,int a)// flight data output
 {
-    P("\n\n\t\t\tNUMBER of the FLIGHT:%d", s[a].flightNumber);
-    P("\n\t\t\tPOINT of the DESTINATION: %s", s[a].pointDestination);
-    P("\n\t\t\tDATE DEPARTURE: %d.%d", s[a].date.day,
+    printf("\n\n\t\t\tNUMBER of the FLIGHT:%d", s[a].flightNumber);
+    printf("\n\t\t\tPOINT of the DESTINATION: %s", s[a].pointDestination);
+    printf("\n\t\t\tDATE DEPARTURE: %d.%d", s[a].date.day,
       s[a].date.month);
-    P("\n\t\t\tTIME DEPARTURE: %d:%d", s[a].date.time.hour,
+    printf("\n\t\t\tTIME DEPARTURE: %d:%d", s[a].date.time.hour,
       s[a].date.time.minute);
-    P("\n\t\t\tPRICE of the TICKET: %d", s[a].price);
+    printf("\n\t\t\tPRICE of the TICKET: %d", s[a].price);
 
-}// dataout()
+}// output_data()
 
 //--------search free--------//
 int search_free_entry(Flight* p, int z)// search free variable
@@ -298,13 +295,13 @@ int search_free_entry(Flight* p, int z)// search free variable
      {
         if(p[i].pointDestination[0] == '\0')
         {
-           P("\tLINE %d IS EMPTY.\n", i+1);
+           printf("\tLINE %d IS EMPTY.\n", i+1);
           ++k;
         }
 
      }
 return k;
-}// search free()
+}// search_free_entry()
 
 //-------search minimal------//
 void search_min_menu(Flight* p, int z)
@@ -313,7 +310,7 @@ void search_min_menu(Flight* p, int z)
     while (1)
     {
          system("cls");
-     P("\n\t\t\tSEARCH MINIMAL\n\
+     printf("\n\t\t\tSEARCH MINIMAL\n\
         \\t\t\tCHOOSE the ELEMENT of DATA:\n\
         \\t\t\tDATE and TIME............1\n\
         \\t\t\tPRICE....................2\n\
@@ -332,7 +329,7 @@ void search_min_menu(Flight* p, int z)
     output_data(p,j);
     getch();
       }
-}// search minimal()
+}// search_min_menu()
 
 //------search value---------//
 void search_menu_for_value(Flight* p, int z)
@@ -341,11 +338,11 @@ void search_menu_for_value(Flight* p, int z)
     while(1)
     {
          system("cls");
-     P("\t\t\t\tSEARCH FOR VALUE\n");
-     P("\n\t\t\tCHOOSE the ELEMENT of DATA:\n");
-     P("\n\t\t\tDATE and TIME............1\n");
-     P("\n\t\t\tPRICE....................2");
-     P("\n\n\n\t\t\tRETURN...................Esc");
+     printf("\t\t\t\tSEARCH FOR VALUE\n");
+     printf("\n\t\t\tCHOOSE the ELEMENT of DATA:\n");
+     printf("\n\t\t\tDATE and TIME............1\n");
+     printf("\n\t\t\tPRICE....................2");
+     printf("\n\n\n\t\t\tRETURN...................Esc");
        switch (getch())
         {
             case '1': j = search_for_date(p,z);
@@ -353,7 +350,7 @@ void search_menu_for_value(Flight* p, int z)
                 continue;
             if(j == -1)
             {
-            P("\n\t\t\tTHERE ARE NOT any FLIGHTS at that DAY");
+            printf("\n\t\t\tTHERE ARE NOT any FLIGHTS at that DAY");
             Sleep(1500);
             continue;
             }
@@ -368,7 +365,7 @@ void search_menu_for_value(Flight* p, int z)
    output_data(p,j);
    getch();
     }
-}// search value()
+}// search_menu_for_value()
 
 //-------sorting-------------//
 void sort_menu_for_value(Flight* p, int z)
@@ -376,12 +373,12 @@ void sort_menu_for_value(Flight* p, int z)
      while (1)
     {
          system("cls");
-     P("\t\t\t\tSORTING\n");
-     P("\n\t\t\tCHOOSE the ELEMENT of DATA:\n");
-     P("\n\t\t\tALPHABET..................1\n");
-     P("\n\t\t\tDATE and TIME.............2\n");
-     P("\n\t\t\tPRICE.....................3\n");
-     P("\n\n\n\t\t\tRETURN....................Esc");
+     printf("\t\t\t\tSORTING\n");
+     printf("\n\t\t\tCHOOSE the ELEMENT of DATA:\n");
+     printf("\n\t\t\tALPHABET..................1\n");
+     printf("\n\t\t\tDATE and TIME.............2\n");
+     printf("\n\t\t\tPRICE.....................3\n");
+     printf("\n\n\n\t\t\tRETURN....................Esc");
         switch (getch())
         {
             case '1':
@@ -402,23 +399,23 @@ void sort_menu_for_value(Flight* p, int z)
                 continue;
         }
      }
-}// sorting()
+}// sort_menu_for_value()
 
 //-------delete element-----//
 void delete_element(Flight* p,int* x)
 {
      int i,j;
     system("cls");
-    P("\n\n\t\t\tDELETE ELEMENT.");
+    printf("\n\n\t\t\tDELETE ELEMENT.");
     while(1)
     {
-    P("\n\n\n\t\t\tINPUT NUMBER of ELEMENT(or <Esc>):");
+    printf("\n\n\n\t\t\tINPUT NUMBER of ELEMENT(or <Esc>):");
     j = input_numbers(5,0);
     if(j < 0)
         return;
     if(j < *x && j > 0)
     break;
-    P("\n\n\t\t\t\tTOO MUCH NUMBER");
+    printf("\n\n\t\t\t\tTOO MUCH NUMBER");
     Sleep(1500);
     }
      for(i = j-1; i < *x-1 ; ++i)
@@ -427,7 +424,7 @@ void delete_element(Flight* p,int* x)
       }
     --(*x);
    free(p + i);
-}// delete element()
+}// delete_element()
 
 //-------edit---------------//
 void edit(Flight* p,int x)// edit element
@@ -435,16 +432,16 @@ void edit(Flight* p,int x)// edit element
     int i;
 
     system("cls");
-    P("\t\t\tEDIT ELEMENT\n\n\n");
+    printf("\t\t\tEDIT ELEMENT\n\n\n");
     while(1)
      {
-    P("\r\t\t\tINPUT a NUMBER of a LINE(or <Esc>):");
+    printf("\r\t\t\tINPUT a NUMBER of a LINE(or <Esc>):");
     i = input_numbers(5,0);
     if(i == -1)
         return;
        if(i > x)
         {
-    P("\r\t\t\tTOO MUCH NUMBER of a LINE           ");
+    printf("\r\t\t\tTOO MUCH NUMBER of a LINE           ");
         Sleep(1500);
         continue;
         }
@@ -452,10 +449,10 @@ void edit(Flight* p,int x)// edit element
      }
      i--;
     output_data(p,i);
-    P("\n");
+    printf("\n");
     while(1)
     {
-       P("\r\t\tA YOU SURE YOU WANT to EDIT the ENTRY?(Y/N)");
+       printf("\r\t\tA YOU SURE YOU WANT to EDIT the ENTRY?(Y/N)");
       switch(getch())
         {
         case 'n':
@@ -471,7 +468,7 @@ void edit(Flight* p,int x)// edit element
 }// edit()
 
 //-------calculate----------//
-void average_price(Flight* p,int x)// Òalculate the average ticket price for the entered date.
+void average_price(Flight* p,int x)// —Åalculate the average ticket price for the entered date.
 {
      int d,m,i,sum,a; // day, month, counter, sum
      float sr; // average price
@@ -480,14 +477,14 @@ void average_price(Flight* p,int x)// Òalculate the average ticket price for the
     {
      system("cls");
        sr=0.0;
-    P("\t\t\tCALCULATE\n\n\n");
-    P("\t\t\tINPUT the DATE(or <Esc>):\n");
-    P("\n\t\t\tmonth:");
+    printf("\t\t\tCALCULATE\n\n\n");
+    printf("\t\t\tINPUT the DATE(or <Esc>):\n");
+    printf("\n\t\t\tmonth:");
     m=input_numbers(2,0);
     if(m < 0)
         return;
        a = number_day_in_month(m);
-    P("\n\t\t\tday:");
+    printf("\n\t\t\tday:");
     d = input_numbers(1,a);
     if(d < 0)
         return;
@@ -502,18 +499,18 @@ void average_price(Flight* p,int x)// Òalculate the average ticket price for the
     if(k>0) // if there are flights
      {
         sr = (float)sum/k; // average price
-     P("\n\t\t\tMEDIAN PRICE:%.2f",sr);
+     printf("\n\t\t\tMEDIAN PRICE:%.2f",sr);
      }
      if(k == 0)// no flights
      {
-         P("\n\t\t\tTHERE ARE NOT any FLIGHTS at that DATE");
+         printf("\n\t\t\tTHERE ARE NOT any FLIGHTS at that DATE");
         Sleep(2000);
-        P("\r\t\t\t                                       \r");
+        printf("\r\t\t\t                                       \r");
      }
 
     getch();
    }
-}// calculate()
+}// average_price()
 
 //--------pricemin----------//
 int search_min_price(Flight* f, int x)
@@ -531,7 +528,7 @@ int search_min_price(Flight* f, int x)
            }
        }
        return c;// return index
-}// pricemin()
+}// search_min_price()
 
 //----------datemin----------//
 int search_min_date(Flight* f,int x)
@@ -555,7 +552,7 @@ int search_min_date(Flight* f,int x)
         }
       }
   return c;
-}// datemin()
+}// search_min_date()
 
 //----------search date--------//
 int search_for_date(Flight *f,int x) // date and time
@@ -563,13 +560,13 @@ int search_for_date(Flight *f,int x) // date and time
     int i, d, k, m, md, a;
     int da,hr; // desired date
     k=-1;
-    P("\n\n\n\t\t\tSEARCH by DATE");
-    P("\n\t\t\tINPUT a DATE(or <Esc>):");
-    P("\n\t\t\tmonth:");
+    printf("\n\n\n\t\t\tSEARCH by DATE");
+    printf("\n\t\t\tINPUT a DATE(or <Esc>):");
+    printf("\n\t\t\tmonth:");
     m = input_numbers(2,0);
     if(m < 0) return -2;
     a = number_day_in_month(m);
-    P("\n\t\t\tday:");
+    printf("\n\t\t\tday:");
     da = input_numbers(1, a);// enter day
     if(da < 0)// cancel input
         return -2;
@@ -580,7 +577,7 @@ int search_for_date(Flight *f,int x) // date and time
      }
      if(k < 0)
      return k;
-    P("\n\t\t\thour:");
+    printf("\n\t\t\thour:");
     hr = input_numbers(3, 0);// enter hour
     if(hr < 0) return -2;
      for(i = 0, md = 1000; i < x; i++)
@@ -601,15 +598,15 @@ int search_for_date(Flight *f,int x) // date and time
 
     }
   return k;
-}// search date()
+}// search_for_date()
 
 //----------searchprice-------//
 int search_for_price(Flight* f,int x)
 {
     int i,k,d,md;
     int pr; // desired price
-    P("\n\n\n\t\t\tSEARCH by PRICE(<Esc> to return)\n");
-    P("\n\t\t\tINPUT the PRICE:");
+    printf("\n\n\n\t\t\tSEARCH by PRICE(<Esc> to return)\n");
+    printf("\n\t\t\tINPUT the PRICE:");
     pr = input_numbers(6,0);// enter price
     if(pr == -1) // exit(ESC)
         return pr;
@@ -625,7 +622,7 @@ int search_for_price(Flight* f,int x)
      }
     }
      return k;
-}// searchprice()
+}// search_for_price()
 
 //--------alphabetsort-------//
 void alphabet_sort(Flight* f,int z)
@@ -659,7 +656,7 @@ void alphabet_sort(Flight* f,int z)
       }
     }
      while(j!=0);
-}// alphabetsort()
+}// alphabet_sort()
 
 //-------datesort------------//
 void date_sort(Flight* f,int z)
@@ -692,7 +689,7 @@ void date_sort(Flight* f,int z)
       }
     }
      while(j!=0);
-}// datesort()
+}// date_sort()
 
 //------pricesort------------//
 void price_sort(Flight* f,int z)
@@ -716,7 +713,7 @@ void price_sort(Flight* f,int z)
       }
     }
      while(j != 0);
-}// pricesort()
+}// price_sort()
 
 //----------getnumber-------//
 int input_numbers(int e,int c) // input numbers
@@ -737,7 +734,7 @@ int input_numbers(int e,int c) // input numbers
         if(d == 8 && i > 0) //edit
         {
           g[--i] = 0;// index back and free element
-          P("\b \b");
+          printf("\b \b");
           continue;
         }
         if(d >= '0' && d <= '9')
@@ -745,7 +742,7 @@ int input_numbers(int e,int c) // input numbers
               if(i >= f)
                 continue;
             g[i] = d-'0';
-            P("%d", g[i++]);
+            printf("%d", g[i++]);
         }
      }
      int j;
@@ -789,11 +786,11 @@ int input_numbers(int e,int c) // input numbers
  }
    /* if(n != -1)
     {
-        for(j = 0; j < i; ++j) P("\b \b");
-        P("\t\t\t%d",n);// printing the final form of the number
+        for(j = 0; j < i; ++j) printf("\b \b");
+        printf("\t\t\t%d",n);// printing the final form of the number
     }*/
     return n;
-}// getnumber()
+}// input_numbers()
 
 //---------checknumber-----------//
 int check_number_dialog() // checking the entered number
@@ -802,9 +799,9 @@ int check_number_dialog() // checking the entered number
     while(1)
     {
         //system("cls");
-       P("\n\t\t\t The number you input is not correct");
+       printf("\n\t\t\t The number you input is not correct");
        Sleep(2000);
-    P("\r\t\t\t     Do you want to input nearest correct value(Y/N)? ");
+    printf("\r\t\t\t     Do you want to input nearest correct value(Y/N)? ");
     //scanf("%c",&ch);
     switch (getch())
      {
@@ -816,7 +813,7 @@ int check_number_dialog() // checking the entered number
      }
     }
 
-}// checknumber()
+}// check_number_dialog()
 
 //--------daymonth------------//
 int number_day_in_month(int month) // returns the number of days in a month
@@ -831,15 +828,15 @@ int number_day_in_month(int month) // returns the number of days in a month
     if(month  == 4 || month == 6 || month == 9 || month == 11)
         day_number = 30;
     return day_number;
-}// daymonth()
+}// number_day_in_month()
 
-//----------inputcity----------//
-int input_city_name()// find city name
+//----------inputcities----------//
+int input_city_name()// find cities name
 {
     int i,j,k,t,s;
     char d,c[M];
     k = -2;
-     P("\n\t\t\tINPUT a CITY NAME:   ");
+     printf("\n\t\t\tINPUT a CITY NAME:   ");
     for(i = 0, c[0] = '\0';;)
     {
         d = getch(); // Esc
@@ -851,24 +848,24 @@ int input_city_name()// find city name
         }
         if(d == 8 && i > 0) // backspace
             {
-                P("\b \b");
+                printf("\b \b");
                 c[i--] = '\0'; // shift the end of the line to the left
             }
     if((d >= 'A' && d <= 'Z') || (d >= 'a' && d <= 'z') || d == '.')
       {
-                c[i] = d; //  d - char
-                c[i+1] = '\0'; // shift zero to the right
-                P("%c", c[i++]);// printing a symbol and erasing the previous inscription
-                P("                    \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+                c[i] = d; //  d - symbol
+                c[i+1] = '\0'; // end of string
+                printf("%c", c[i++]);// printing a symbol and erasing the previous inscription
+                printf("                    \b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
         for(j = 0; j < N; ++j)// match check
          {
             t = s = 0;
-            if((c[0] == city[j][0]) || (c[0]-32) == city[j][0])
+            if((c[0] == cities[j][0]) || (c[0]-32) == cities[j][0])
             {
              for(k = -2, t = 1; c[t] != '\0'; ++t)
                {
-                if((c[t] == city[j][t]) ||
-                   ((c[t]-32) == city[j][t]))
+                if((c[t] == cities[j][t]) ||
+                   ((c[t]-32) == cities[j][t]))
                 {
                     s++;
                 }
@@ -878,11 +875,11 @@ int input_city_name()// find city name
                  {
                      int z,w;
                         for(z = 0; z <= s; ++z)
-                            P("\b");// shift the beginning of the word to the left
-                        P("%s",city[j]);// output the word
-                      for(z = 0; city[j][z] != '\0'; z++);// word length
+                            printf("\b");// shift the beginning of the word to the left
+                        printf("%s",cities[j]);// output the word
+                      for(z = 0; cities[j][z] != '\0'; z++);// word length
                       for(w = 0; w < z-s-1; w++) // return the cursor to the beginning of the word
-                        P("\b");   // minus the typed characters
+                        printf("\b");   // minus the typed characters
                          k = j; // get the index
                         break;
                   }
@@ -893,7 +890,7 @@ int input_city_name()// find city name
   }
 
 
-}
+}// input_city_name()
 
 int exit_dialog()
 {
@@ -915,5 +912,5 @@ int exit_dialog()
         }
     }
 
-}// inputcity()
+}// exit_dialog()
 
