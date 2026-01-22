@@ -37,7 +37,7 @@ void initialize(Flight* p, int n)// initializing the database
 } // initialize()
 
 //--------print--------------//
-void output_table(Flight* p,int z)//вывод таблицы
+void output_table(Flight* p,int z)
 {
     system("cls");
     system("color 1F");
@@ -913,4 +913,5 @@ int exit_dialog()
     }
 
 }// exit_dialog()
+
 
