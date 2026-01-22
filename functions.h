@@ -1,6 +1,9 @@
 #ifndef FUNCTIONS
 #define FUNCTIONS
 
+#define N 45
+#define M 15
+
 // departure time
 typedef struct time
 {
@@ -41,7 +44,6 @@ void sort_menu_for_value(Flight*, int);
 void alphabet_sort(Flight*, int);
 void date_sort(Flight*, int);
 void price_sort(Flight*, int);
-void delete_element(Flight*, int*);
 void edit(Flight*, int);
 void average_price(Flight*, int);
 void output_table(Flight*, int);
